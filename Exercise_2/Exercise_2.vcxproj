@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FinalAssignment_eachPixel.cpp" />
+    <ClCompile Include="segmentation.cpp" />
     <ClCompile Include="tracker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
