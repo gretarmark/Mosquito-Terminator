@@ -161,7 +161,8 @@
     <Image Include="PIC1_R.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FinalAssignment_Thresholding3channels.cpp" />
+    <ClCompile Include="FinalAssignment_eachPixel.cpp" />
+    <ClCompile Include="tracker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
