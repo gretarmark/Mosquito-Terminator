@@ -53,10 +53,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FinalAssignment_eachPixel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tracker.cpp">
+    <ClCompile Include="FinalAssignment_Thresholding3channels.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

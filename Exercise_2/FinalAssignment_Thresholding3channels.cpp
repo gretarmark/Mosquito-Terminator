@@ -32,19 +32,12 @@ int main(int argc, char** argv) {
 
     char wk;
 
-    // Lower and upper bounds
+    // Lower and upper bounds, used for thresholding
     Scalar lowerBound(120, 80, 100); // Lower Threshold Bounds
     Scalar upperBound(140, 85, 110); // Upper Threshold Bounds
 
     // Create a VideoCapture object and open the input file
     // If the input is the web camera, pass 0 instead of the video file name
-
-    //VideoCapture cap("Bolti.mp4");
-    //VideoCapture cap2("Bolti.mp4");
-    //VideoCapture cap("MovTin.mp4");
-    //VideoCapture cap2("MovTin.mp4");
-    //VideoCapture cap("TingHighQual.mp4");
-    //VideoCapture cap2("TingHighQual.mp4");
     VideoCapture cap("TwoObjects.mp4");
     VideoCapture cap2("TwoObjects.mp4");
 
@@ -62,24 +55,24 @@ int main(int argc, char** argv) {
         cap2 >> Background;
         if (Background.empty()) break;
 
-        // mean value of the background and current frame
-        for (int u = 1; u < Background.rows - 1; ++u) {
-            for (int v = 1; v < 3 * Background.cols - 1; ++v) {
-                Background_sum += (double)Background.at<uchar>(u, v);
-                count += 1;
-            }
-        }
-        var += (Background_sum / count);
+        //// mean value of the background and current frame
+        //for (int u = 1; u < Background.rows - 1; ++u) {
+        //    for (int v = 1; v < 3 * Background.cols - 1; ++v) {
+        //        Background_sum += (double)Background.at<uchar>(u, v);
+        //        count += 1;
+        //    }
+        //}
+        //var += (Background_sum / count);
 
-        count_sum += 1;
+        //count_sum += 1;
 
         if (count_sum == 1) {
-            Background_mean = var / count_sum;
+            //Background_mean = var / count_sum;
             break;
         }
 
-        Background_sum = 0;
-        count = 0;
+        //Background_sum = 0;
+        //count = 0;
     }
 
 
@@ -126,7 +119,7 @@ int main(int argc, char** argv) {
 
 
         /*
-        
+
         */
 
 
@@ -141,7 +134,7 @@ int main(int argc, char** argv) {
                 //check1 = (double)bgr_CurrentFrame[0].at<uchar>(u, v) - (double)bgr_Background[0].at<uchar>(u, v);
                 //check2 = (double)bgr_CurrentFrame[1].at<uchar>(u, v) - (double)bgr_Background[1].at<uchar>(u, v);
                 //check3 = (double)bgr_CurrentFrame[2].at<uchar>(u, v) - (double)bgr_Background[2].at<uchar>(u, v);
-                
+
 
 
                 //if (check1 > Threshold2) { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)255; }
@@ -153,21 +146,21 @@ int main(int argc, char** argv) {
                 //if (check3 > Threshold2) { bgr_CurrentFrame[2].at<uchar>(u, v) = (uchar)255; }
                 //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
 
-                
+
                 //if ((u == CurrentFrame.rows / 2) && (v == (3 * CurrentFrame.cols / 2))) {
                 //    double x = (double)CurrentFrame.at<Vec3b>(10, 29)[0];
                 //    cout << "bgr_Current[0] value: " << x <<  endl;
                 //    //cout << "bgr_Current[0] value: " << CurrentFrame.at<Vec3b>(u, v)[0] << endl;
                 //    system("Pause");
                 //}
-                
 
-                
+
+
 
 
                 if (abs((double)CurrentFrame.at<uchar>(u, v) - (double)Background.at<uchar>(u, v)) > Threshold2) {
-                    CurrentFrame.at<uchar>(u, v) = (uchar)2*256;
-                    
+                    CurrentFrame.at<uchar>(u, v) = (uchar)2 * 256;
+
                 }
                 else {
                     //CurrentFrame.at<uchar>(u, v) = (char)((double)CurrentFrame.at<uchar>(u,v) - (double)Background.at<uchar>(u,v));
