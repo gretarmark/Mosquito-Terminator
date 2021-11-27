@@ -24,7 +24,8 @@ string type2str(int type);
 
 int main(int argc, char** argv) {
     double Threshold = 1, Threshold2 = 84;
-    double count = 0, count_sum = 0, count_abs = 0, counter1 = 0, counter2 = 0;
+    double red_threshold = 160, green_threshold = 140, blue_threshold = 120; // B goes lowest, sometimes 85 or 94, (B:125)(G:148),(R:167)
+    double count = 0, count_sum = 0, count_abs = 0, counter1 = 0, counter2 = 0, counter3 = 0;
 
     double Background_sum = 0, CurrentFrame_sum = 0, OldFrame_sum = 0;
     double Background_mean = 0, CurrentFrame_mean = 0, OldFrame_mean = 0, var = 0;
@@ -33,8 +34,8 @@ int main(int argc, char** argv) {
     char wk;
 
     // Lower and upper bounds, used for thresholding
-    Scalar lowerBound(120, 80, 100); // Lower Threshold Bounds
-    Scalar upperBound(140, 85, 110); // Upper Threshold Bounds
+    //Scalar lowerBound(120, 80, 100); // Lower Threshold Bounds
+    //Scalar upperBound(140, 85, 110); // Upper Threshold Bounds
 
     // Create a VideoCapture object and open the input file
     // If the input is the web camera, pass 0 instead of the video file name
@@ -55,31 +56,45 @@ int main(int argc, char** argv) {
         cap2 >> Background;
         if (Background.empty()) break;
 
-        //// mean value of the background and current frame
-        //for (int u = 1; u < Background.rows - 1; ++u) {
-        //    for (int v = 1; v < 3 * Background.cols - 1; ++v) {
-        //        Background_sum += (double)Background.at<uchar>(u, v);
-        //        count += 1;
-        //    }
-        //}
-        //var += (Background_sum / count);
+        // mean value of the background and current frame
+        for (int u = 1; u < Background.rows - 1; ++u) {
+            for (int v = 1; v < 3 * Background.cols - 1; ++v) {
+                Background_sum += (double)Background.at<uchar>(u, v);
+                count += 1;
+            }
+        }
+        var += (Background_sum / count);
 
-        //count_sum += 1;
+        count_sum += 1;
 
         if (count_sum == 1) {
-            //Background_mean = var / count_sum;
+            Background_mean = var / count_sum;
             break;
         }
 
-        //Background_sum = 0;
-        //count = 0;
+        Background_sum = 0;
+        count = 0;
     }
 
 
     string ty = type2str(Background.type());
     printf("Matrix: %s %dx%d \n", ty.c_str(), Background.cols, Background.rows);
 
+    imshow("Background", Background);
+
     cout << "Channels: " << Background.channels() << endl;
+
+    //Mat bgr_Background[3];
+    //split(Background, bgr_Background);
+    //cout << "Channel B: " << bgr_Background[0].size() << endl;
+    //cout << "Channel G: " << bgr_Background[1].size() << endl;
+    //cout << "Channel R: " << bgr_Background[2].size() << endl;
+    //cout << "Channels size: " << Background.size() << endl;
+
+    //cout << "d_Channel B: " << bgr_Background[0].depth() << endl;
+    //cout << "d_Channel G: " << bgr_Background[1].depth() << endl;
+    //cout << "d_Channel R: " << bgr_Background[2].depth() << endl;
+    //cout << "d_Channels size: " << Background.depth() << endl;
 
 
     cout << "N: " << count_sum << endl;
@@ -97,14 +112,23 @@ int main(int argc, char** argv) {
     while (1) {
         Mat CurrentFrame;
         cap >> CurrentFrame;                    // Capture frame-by-frame
+        
+                                                // If the frame is empty, break immediately
+        if (CurrentFrame.empty()) break;
+        if (Background.empty()) break;
+
+
+        //// read next frame if any
+        //if (!capture.read(frame))
+        //    break;
 
         imshow("CurrentFrame Before Changes", CurrentFrame);
 
 
         // https://cppsecrets.com/users/203110310511410511510410011599115495764103109971051084699111109/C00-OpenCV-cvsplit.php
         // https://www.youtube.com/watch?v=VjYtoL0wZMc
-        Mat bgr_CurrentFrame[3];
-        Mat bgr_Background[3];
+        //Mat bgr_CurrentFrame[3];
+        //Mat bgr_Background[3];
         //split(CurrentFrame, bgr_CurrentFrame);
         //split(Background, bgr_Background);
 
@@ -123,32 +147,34 @@ int main(int argc, char** argv) {
         */
 
 
-        // If the frame is empty, break immediately
-        if (CurrentFrame.empty()) break;
-        if (Background.empty()) break;
+
 
 
         // mean value of the background and current frame
         for (int u = 1; u < CurrentFrame.rows - 1; ++u) {
-            for (int v = 1; v < 3 * CurrentFrame.cols - 1; ++v) {
-                //check1 = (double)bgr_CurrentFrame[0].at<uchar>(u, v) - (double)bgr_Background[0].at<uchar>(u, v);
-                //check2 = (double)bgr_CurrentFrame[1].at<uchar>(u, v) - (double)bgr_Background[1].at<uchar>(u, v);
-                //check3 = (double)bgr_CurrentFrame[2].at<uchar>(u, v) - (double)bgr_Background[2].at<uchar>(u, v);
+            for (int v = 1; v < (CurrentFrame.channels() * CurrentFrame.cols) - 1; ++v) {
+                /*check1 = (double)CurrentFrame.at<Vec3b>(u, v)[0] - (double)Background.at<Vec3b>(u, v)[0];
+                check2 = (double)CurrentFrame.at<Vec3b>(u, v)[1] - (double)Background.at<Vec3b>(u, v)[1];
+                check3 = (double)CurrentFrame.at<Vec3b>(u, v)[2] - (double)Background.at<Vec3b>(u, v)[2];
+
+
+                if (check1 > blue_threshold) { CurrentFrame.at<Vec3b>(u, v)[0] = (uchar)255; }
+                else { CurrentFrame.at<Vec3b>(u, v)[0] = (uchar)0; }
+
+                if (check2 > green_threshold) { CurrentFrame.at<Vec3b>(u, v)[1] = (uchar)255; }
+                else { CurrentFrame.at<Vec3b>(u, v)[1] = (uchar)0; }
+
+                if (check3 > red_threshold) { CurrentFrame.at<Vec3b>(u, v)[2] = (uchar)255; }
+                else { CurrentFrame.at<Vec3b>(u, v)[2] = (uchar)0; }*/
+
+                cout << "Val: " << (double)CurrentFrame.at<Vec3b>(u, v)[0] << endl;
+                counter3 += 1;
+                cout << "Counter: " << counter3 << endl;
 
 
 
-                //if (check1 > Threshold2) { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)255; }
-                //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
-
-                //if (check2 > Threshold2) { bgr_CurrentFrame[1].at<uchar>(u, v) = (uchar)255; }
-                //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
-
-                //if (check3 > Threshold2) { bgr_CurrentFrame[2].at<uchar>(u, v) = (uchar)255; }
-                //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
-
-
-                //if ((u == CurrentFrame.rows / 2) && (v == (3 * CurrentFrame.cols / 2))) {
-                //    double x = (double)CurrentFrame.at<Vec3b>(10, 29)[0];
+                //if ((u == 200) && (v == (400))) {
+                //    double x = (double)CurrentFrame.at<Vec3b>(10, 29)[2];
                 //    cout << "bgr_Current[0] value: " << x <<  endl;
                 //    //cout << "bgr_Current[0] value: " << CurrentFrame.at<Vec3b>(u, v)[0] << endl;
                 //    system("Pause");
@@ -157,22 +183,16 @@ int main(int argc, char** argv) {
 
 
 
-
-                if (abs((double)CurrentFrame.at<uchar>(u, v) - (double)Background.at<uchar>(u, v)) > Threshold2) {
-                    CurrentFrame.at<uchar>(u, v) = (uchar)2 * 256;
-
-                }
-                else {
-                    //CurrentFrame.at<uchar>(u, v) = (char)((double)CurrentFrame.at<uchar>(u,v) - (double)Background.at<uchar>(u,v));
-                    CurrentFrame.at<uchar>(u, v) = (uchar)50;
-                }
-
-
-                //// Thresholding each color channel (B, G, R)
-                //rgbchannel[0]
-                //rgbchannel[1]
-                //rgbchannel[2]
-
+                //if (abs((double)CurrentFrame.at<uchar>(u, v) - (double)Background.at<uchar>(u, v)) > Threshold2) {
+                //    /*CurrentFrame.at<uchar>(u, v) = (uchar)2 * 256;*/
+                //    cout << "B: " << (double)CurrentFrame.at<Vec3b>(u, v)[0] << endl;
+                //    cout << "G: " << (double)CurrentFrame.at<Vec3b>(u, v)[1] << endl;
+                //    cout << "R: " << (double)CurrentFrame.at<Vec3b>(u, v)[2] << endl;
+                //}
+                //else {
+                //    //CurrentFrame.at<uchar>(u, v) = (char)((double)CurrentFrame.at<uchar>(u,v) - (double)Background.at<uchar>(u,v));
+                //    CurrentFrame.at<uchar>(u, v) = (uchar)50;
+                //}
 
             }
         }
@@ -203,8 +223,6 @@ int main(int argc, char** argv) {
 
         //CurrentFrame.copyTo(OldFrame);
         //if (OldFrame.empty()) break;
-
-
 
 
 

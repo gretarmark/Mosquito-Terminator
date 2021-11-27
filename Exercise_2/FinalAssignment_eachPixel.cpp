@@ -32,6 +32,11 @@ int main(int argc, char** argv) {
 
     char wk;
 
+    count_sum = 0;
+    count = 0;
+
+    double check1 = 0, check2 = 0, check3 = 0;
+
     // Lower and upper bounds
     Scalar lowerBound(120, 80, 100); // Lower Threshold Bounds
     Scalar upperBound(140, 85, 110); // Upper Threshold Bounds
@@ -95,10 +100,7 @@ int main(int argc, char** argv) {
     cout << "Background Columns: " << Background.cols << endl;
     system("Pause");
 
-    count_sum = 0;
-    count = 0;
 
-    double check1, check2, check3;
 
     // Start the machine
     while (1) {
@@ -110,8 +112,8 @@ int main(int argc, char** argv) {
 
         // https://cppsecrets.com/users/203110310511410511510410011599115495764103109971051084699111109/C00-OpenCV-cvsplit.php
         // https://www.youtube.com/watch?v=VjYtoL0wZMc
-        Mat bgr_CurrentFrame[3];
-        Mat bgr_Background[3];
+        //Mat bgr_CurrentFrame[3];
+        //Mat bgr_Background[3];
         //split(CurrentFrame, bgr_CurrentFrame);
         //split(Background, bgr_Background);
 
@@ -137,24 +139,27 @@ int main(int argc, char** argv) {
 
         // mean value of the background and current frame
         for (int u = 1; u < CurrentFrame.rows - 1; ++u) {
+            //cout << "u: " << u << endl;
             for (int v = 1; v < 3 * CurrentFrame.cols - 1; ++v) {
-                //check1 = (double)bgr_CurrentFrame[0].at<uchar>(u, v) - (double)bgr_Background[0].at<uchar>(u, v);
-                //check2 = (double)bgr_CurrentFrame[1].at<uchar>(u, v) - (double)bgr_Background[1].at<uchar>(u, v);
-                //check3 = (double)bgr_CurrentFrame[2].at<uchar>(u, v) - (double)bgr_Background[2].at<uchar>(u, v);
+                //cout << "v: " << v << endl;
+
+                //check1 = (double)CurrentFrame.at<Vec3b>(u, v)[0] - (double)Background.at<Vec3b>(u, v)[0];
+                //check2 = (double)CurrentFrame.at<Vec3b>(u, v)[1] - (double)Background.at<Vec3b>(u, v)[1];
+                //check3 = (double)CurrentFrame.at<Vec3b>(u, v)[2] - (double)Background.at<Vec3b>(u, v)[2];
                 
 
 
-                //if (check1 > Threshold2) { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)255; }
-                //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
+                //if (check1 > Threshold2) { CurrentFrame.at<Vec3b>(u, v)[0] = (uchar)255; }
+                //else { CurrentFrame.at<Vec3b>(u, v)[0] = (uchar)0; }
 
-                //if (check2 > Threshold2) { bgr_CurrentFrame[1].at<uchar>(u, v) = (uchar)255; }
-                //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
+                //if (check2 > Threshold2) { CurrentFrame.at<Vec3b>(u, v)[1] = (uchar)255; }
+                //else { CurrentFrame.at<Vec3b>(u, v)[1] = (uchar)0; }
 
-                //if (check3 > Threshold2) { bgr_CurrentFrame[2].at<uchar>(u, v) = (uchar)255; }
-                //else { bgr_CurrentFrame[0].at<uchar>(u, v) = (uchar)0; }
+                //if (check3 > Threshold2) { CurrentFrame.at<Vec3b>(u, v)[2] = (uchar)255; }
+                //else { CurrentFrame.at<Vec3b>(u, v)[2] = (uchar)0; }
 
                 
-                //if ((u == CurrentFrame.rows / 2) && (v == (3 * CurrentFrame.cols / 2))) {
+                //if ((u == 200) && (v == (400))) {
                 //    double x = (double)CurrentFrame.at<Vec3b>(10, 29)[0];
                 //    cout << "bgr_Current[0] value: " << x <<  endl;
                 //    //cout << "bgr_Current[0] value: " << CurrentFrame.at<Vec3b>(u, v)[0] << endl;

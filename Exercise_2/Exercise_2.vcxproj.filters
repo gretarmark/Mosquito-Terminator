@@ -53,10 +53,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FinalAssignment_Thresholding3channels.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="segmentation.cpp">
+    <ClCompile Include="FinalAssignment_GaussianForeground.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
