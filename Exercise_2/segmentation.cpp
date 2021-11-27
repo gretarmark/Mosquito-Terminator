@@ -27,10 +27,12 @@ public:
 		
 		markers = Mat::zeros(dist.size(), CV_32S);
 		markers.convertTo(markers8u, CV_8U, 10);
+		if (dist.size() > 0) {
+			watershed(current_frame, markers);
+			markers.convertTo(mark, CV_8U);
+			bitwise_not(mark, mark);
+		}
 		
-		watershed(current_frame, markers);
-		markers.convertTo(mark, CV_8U);
-		bitwise_not(mark, mark);
 		//dst = Mat::zeros(markers.size(), CV_8UC3);
 	}
 	
