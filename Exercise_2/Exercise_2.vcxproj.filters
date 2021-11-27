@@ -18,6 +18,9 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="centroidtracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Exercise_2.rc">
@@ -53,10 +56,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FinalAssignment_GaussianForeground.cpp">
+    <ClCompile Include="segmentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="segmentation.cpp">
+    <ClCompile Include="FinalAssignment_GaussianForeground.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
