@@ -118,10 +118,10 @@ int main(int argc, char** argv) {
         //threshold(foreground, foreground, 128, 255, cv::THRESH_BINARY_INV);
         //threshold(foreground, foreground, 190, 255, cv::THRESH_TRUNC);
 
-        segmentation obj(foreground);
+        segmentation obj(frame,foreground);
         
-        cv::imshow("Segmentation", obj.markers);
-
+        cv::imshow("Segmentation", obj.dist);
+        //cout << "markers: " << obj.mark << endl;
 
         //Mat mask 
         // Color thresholding
