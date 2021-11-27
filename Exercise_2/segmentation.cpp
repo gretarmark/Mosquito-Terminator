@@ -19,11 +19,15 @@ public:
 	Mat markers8u;
 	Mat mark;
 	Mat dst;
+	Mat kernel1 = Mat::ones(3, 3, CV_8U);
 	vector<vector<Point> > contours;
 	segmentation(Mat src,Mat bw) {
 		current_frame = bw;
 		source_img = src;
 		distanceTransform(current_frame, dist, DIST_L2, 3);
+		normalize(dist, dist, 0, 1.0, NORM_MINMAX);
+		threshold(dist, dist, 0.4, 1.0, THRESH_BINARY);
+		dilate(dist, dist, kernel1);
 		dist.convertTo(dist_8u, CV_8U);
 		findContours(dist_8u, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		
