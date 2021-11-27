@@ -22,11 +22,16 @@
 
 #include <sstream>
 
-#include "segmentation.cpp"
+#include <opencv2/core/utility.hpp>
+#include <opencv2/tracking.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/highgui.hpp>
+#include <iostream>
+#include <cstring>
 
 
 
-// https://www.pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/
+
 
 // https://en.wikipedia.org/wiki/Moving_object_detection
 
@@ -41,10 +46,11 @@ using namespace std::chrono; // nanoseconds, system_clock, seconds
 
 int main(int argc, char** argv) {
 
+    Rect2d roi;
 
-    
+    Ptr<Tracker> tracker = TrackerKCF::create(); // create a tracker object
 
-    
+
 
     // Create a VideoCapture object and open the input file
     // If the input is the web camera, pass 0 instead of the video file name
@@ -65,7 +71,7 @@ int main(int argc, char** argv) {
     cv::namedWindow("Extracted Foreground");
     // The Mixture of Gaussian object
     // used with all default parameters
-    
+
 
 
         /*   createBackgroundSubtractorMOG2(history, varThreshold, detectShadow);   */
@@ -80,8 +86,8 @@ int main(int argc, char** argv) {
     //system("Pause");
 
     vector<vector<Point> > contours;
-    
-    
+
+
 
     int counter = 0;
 
@@ -92,7 +98,6 @@ int main(int argc, char** argv) {
         capture >> movie;
         imshow("Video", movie);
 
-        
 
         //counter += 1;
         //if (counter == 2) {
@@ -115,18 +120,13 @@ int main(int argc, char** argv) {
         // learning rate
         // Complement the image
 
-        //threshold(foreground, foreground, 128, 255, cv::THRESH_BINARY_INV);
+        threshold(foreground, foreground, 128, 255, cv::THRESH_BINARY_INV);
         //threshold(foreground, foreground, 190, 255, cv::THRESH_TRUNC);
-
-        segmentation obj(foreground);
-        
-        cv::imshow("Segmentation", obj.markers);
-
 
         //Mat mask 
         // Color thresholding
         //inRange(frame, Scalar(100, 125, 100), Scalar(255, 200, 255), foreground);
-        
+
         // Finding contours in the image
         //findContours(foreground, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
         /*cout << "contours: " << contours[0][0].x << endl;*/
@@ -143,5 +143,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
-

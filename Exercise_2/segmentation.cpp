@@ -24,7 +24,7 @@ public:
 		dist.convertTo(dist_8u, CV_8U);
 		findContours(dist_8u, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		markers = Mat::zeros(dist.size(), CV_32S);
-		watershed(bw, markers);
+		watershed(current_frame, markers);
 		bitwise_not(mark, mark);
 		//dst = Mat::zeros(markers.size(), CV_8UC3);
 	}
