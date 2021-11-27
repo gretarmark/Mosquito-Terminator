@@ -118,9 +118,27 @@ int main(int argc, char** argv) {
         //threshold(foreground, foreground, 128, 255, cv::THRESH_BINARY_INV);
         //threshold(foreground, foreground, 190, 255, cv::THRESH_TRUNC);
 
-        segmentation obj(frame,foreground);
+        /*segmentation obj(frame,foreground);
         
-        cv::imshow("Segmentation", obj.dist);
+        Mat dst = Mat::zeros(obj.markers.size(), CV_8UC3);
+        vector<Vec3b> colors;
+        for (size_t i = 0; i < obj.contours.size(); i++) {
+            int b = theRNG().uniform(0, 256);
+            int g = theRNG().uniform(0, 256);
+            int r = theRNG().uniform(0, 256);
+            colors.push_back(Vec3b((uchar)b, (uchar)g, (uchar)r));
+        }
+        for (int i = 0; i < obj.markers.rows; i++) {
+            for (int j = 0; j < obj.markers.cols; j++) {
+                int index = obj.markers.at<int>(i, j);
+                cout << index << endl;
+                if (index > 0 && index <= static_cast<int>(obj.contours.size())) {
+                    dst.at<Vec3b>(i, j) = colors[index - 1];
+                }
+
+            }
+        }
+        cv::imshow("Segmentation", dst);*/
         //cout << "markers: " << obj.mark << endl;
 
         //Mat mask 
