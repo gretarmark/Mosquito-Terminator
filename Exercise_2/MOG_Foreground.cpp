@@ -49,9 +49,9 @@ int main(int argc, char** argv) {
 
     // Create a VideoCapture object and open the input file
     // If the input is the web camera, pass 0 instead of the video file name
-    //VideoCapture capture("TwoObjects.mp4");
+    VideoCapture capture("TwoObjects.mp4");
     //VideoCapture cap2("TwoObjects.mp4");
-    VideoCapture capture(0);
+    //VideoCapture capture(0);
 
 
     // Open the video file
