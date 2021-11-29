@@ -101,7 +101,6 @@ int main(int argc, char** argv) {
     system("Pause");
 
 
-
     // Start the machine
     while (1) {
         Mat CurrentFrame;

@@ -15,7 +15,7 @@ using namespace std::this_thread; // sleep_for, sleep_until
 using namespace std::chrono; // nanoseconds, system_clock, seconds
 
 int main(int argc, char** argv) {
-    double Threshold = 1, Threshold2 = 55;
+    double Threshold = 1, Threshold2 = 70;
     double count = 0, count_sum = 0, count_abs = 0, counter1 = 0, counter2 = 0;
 
     double Background_sum = 0, CurrentFrame_sum = 0, OldFrame_sum = 0;
@@ -50,9 +50,10 @@ int main(int argc, char** argv) {
         cap2 >> Background;
         if (Background.empty()) break;
 
+
         // mean value of the background and current frame
-        for (int u = 1; u < Background.rows - 1; ++u) {
-            for (int v = 1; v < 3 * Background.cols - 1; ++v) {
+        for (int u = 0; u < Background.rows; ++u) {
+            for (int v = 0; v < 3 * Background.cols; ++v) {
                 Background_sum += (double)Background.at<uchar>(u, v);
                 count += 1;
             }
@@ -70,7 +71,7 @@ int main(int argc, char** argv) {
         count = 0;
     }
 
-    cout << "Channels: " << Background.channels() << endl;
+    /*cout << "Channels: " << Background.channels() << endl;
 
 
     cout << "N: " << count_sum << endl;
@@ -82,7 +83,7 @@ int main(int argc, char** argv) {
     system("Pause");
 
     count_sum = 0;
-    count = 0;
+    count = 0;*/
 
 
     // Start the machine
@@ -111,18 +112,23 @@ int main(int argc, char** argv) {
 
 
         // mean value of the background and current frame
-        for (int u = 1; u < CurrentFrame.rows - 1; ++u) {
-            for (int v = 1; v < 3 * CurrentFrame.cols - 1; ++v) {
+        for (int u = 0; u < CurrentFrame.rows; ++u) {
+            for (int v = 0; v < 3*CurrentFrame.cols; ++v) {
 
                 //if (bgr_channel) 
                 
                 if (abs((double)CurrentFrame.at<uchar>(u, v) - (double)Background.at<uchar>(u, v)) > Threshold2) {
-                    CurrentFrame.at<uchar>(u, v) = (uchar)2*256;
-                    
+                    CurrentFrame.at<uchar>(u, v) = (uchar)255;
+                    /* CurrentFrame.at<Vec3b>(u, v)[0] = 255;
+                    CurrentFrame.at<Vec3b>(u, v)[1] = 255;
+                    CurrentFrame.at<Vec3b>(u, v)[2] = 255;*/
                 }
                 else {
                     //CurrentFrame.at<uchar>(u, v) = (char)((double)CurrentFrame.at<uchar>(u,v) - (double)Background.at<uchar>(u,v));
-                    CurrentFrame.at<uchar>(u, v) = (uchar)50;
+                    CurrentFrame.at<uchar>(u, v) = (uchar)0;
+                    /*CurrentFrame.at<Vec3b>(u, v)[0] = 0;
+                    CurrentFrame.at<Vec3b>(u, v)[1] = 0;
+                    CurrentFrame.at<Vec3b>(u, v)[2] = 0;*/
                 }
 
 

@@ -162,8 +162,7 @@
     <Image Include="PIC1_R.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FinalAssignment_GaussianForeground.cpp" />
-    <ClCompile Include="segmentation.cpp" />
+    <ClCompile Include="BackgroundSubtract.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

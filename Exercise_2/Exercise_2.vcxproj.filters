@@ -56,10 +56,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="segmentation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FinalAssignment_GaussianForeground.cpp">
+    <ClCompile Include="BackgroundSubtract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

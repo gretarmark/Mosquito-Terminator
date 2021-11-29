@@ -4,12 +4,41 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
+#include "opencv2/opencv.hpp"
+#include <stdio.h>  
+#include <stdlib.h> 
+#include <chrono>
+#include <thread>
+#include <Windows.h>
+#include <string>
+#include <vector>
+
+#include "opencv2/objdetect/objdetect.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/video/background_segm.hpp>
+
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/videoio.hpp"
+#include <opencv2/highgui.hpp>
+#include <opencv2/video.hpp>
+
+#include <sstream>
+
+#include "segmentation.cpp"
+
+
+
+
 using namespace cv;
 using namespace std;
 
 int main() {
-    std::cout << "Hello, Tracker!" << std::endl;
     auto centroidTracker = new CentroidTracker(20);
+
+    Ptr<BackgroundSubtractor> mog = createBackgroundSubtractorMOG2(1, 100, false);
 
     VideoCapture cap(0);
 //    VideoCapture cap("../../test2.mp4");
@@ -17,16 +46,28 @@ int main() {
         cout << "Cannot open camera";
     }
 
-    String modelTxt = "../model/deploy.prototxt";
-    String modelBin = "../model/res10_300x300_ssd_iter_140000.caffemodel";
+
+    String modelTxt = "C:/Users/greta/source/repos/Exercise_2/Exercise_2/deploy.prototxt";
+    String modelBin = "C:/Users/greta/source/repos/Exercise_2/Exercise_2/res10_300x300_ssd_iter_140000.caffemodel";
+
+    //String modelTxt = "../model/deploy.prototxt";
+    //String modelBin = "../model/res10_300x300_ssd_iter_140000.caffemodel";
 
     cout << "Loading model.." << endl;
     auto net = dnn::readNetFromCaffe(modelTxt, modelBin);
 
-    cout << "Starting video stream" << endl;
+
+    cv::Mat cameraFrame;
+
     while (cap.isOpened()) {
-        Mat cameraFrame;
-        cap.read(cameraFrame);
+        Mat webcam;
+        
+        //cap.read(webcam);
+        cap >> webcam;
+
+
+        mog->apply(webcam, cameraFrame, 0.05);
+
 
         resize(cameraFrame, cameraFrame, Size(400, 300));
         auto inputBlob = dnn::blobFromImage(cameraFrame, 1.0, Size(400, 300), Scalar(104.0, 177.0, 123.0));
